@@ -1,0 +1,91 @@
+---
+title: "Deployments"
+description: "Your model can be deployed as a real-time API. Slai includes client libraries for cURL, Python, and Node, allowing you to call the deployed model from your own codebase. "
+---
+
+## Starting a deployment
+
+To deploy a model, click the **Deploy** button in your sandbox.
+
+![Deploy button](/img/sandbox/deployments/deploy.png)
+
+## Configuring a deployment
+
+A modal will appear, showing the deployment version. You'll have the option to configure your deployment by clicking **Advanced deployment options**.
+
+[You can find more information on using advanced deployment options here](/user-guides/advanced-deployment-options)
+
+<div class="sm:flex sm:justify-center space-x-4">
+  <div class="flex items-center flex-col">
+    <img class="h-80" src="/img/sandbox/deployments/deploy-model.png" />
+    <p class="not-prose mt-0 text-sm text-slate-600 dark:text-slate-400">
+      This modal appears after clicking Deploy
+    </p>
+  </div>
+  <div class="flex items-center flex-col">
+    <img class="h-80" src="/img/sandbox/deployments/deployment-settings.png" />
+    <p class="not-prose mt-0 text-sm text-slate-600 dark:text-slate-400">
+      Configure various deployment settings, if you wish
+    </p>
+  </div>
+</div>
+
+Clicking **Deploy** will package and deploy your application to the Slai backend.
+
+## Monitoring a deployment
+
+After deploying, you'll be redirected to a dashboard to monitor the status of the deployment.
+
+On the monitoring page, you can view APM-style metrics:
+
+- Total API calls
+- Total errors
+- Average inference time
+- Average cold start time
+- Requests per second
+- Logs on the container
+
+![Monitor the deployment](/img/sandbox/deployments/monitor-deployment.png)
+
+## Calling the API
+
+Once the model is deployed, it can be called via our cURL, Python, or Node client. Your `client_id`, `client_secret`, and model name will be filled in dynamically.
+
+Click the **Integrate** button to copy the integration code in any of our three client libraries.
+
+![Integrate](/img/sandbox/deployments/integrate.png)
+
+Just copy and paste this into your shell, and you can start running inference.
+
+<CodeGroup>
+```python Python
+# Example usage of model API
+
+import slai
+
+slai.login(
+client_id="c3cf0b3d30f03579f9d8e7b416ce81a3",
+client_secret="51b42996f59d795f12c80c45ac4f4ffe"
+)
+
+model = slai.model("GPT-2/initial")
+
+# This is just an example of how to call your model
+
+# Parameters vary based on your handler inputs
+
+prediction = model(text="Once upon a time I was reading the docs")
+
+````
+
+```bash cURL
+curl -X POST --compressed "https://models.slai.io/mucgs/predict" \
+   -H 'Accept: */*' \
+   -H 'Accept-Encoding: gzip, deflate' \
+   -H 'Authorization: Basic YzNjZjBiM2QzMGYwMzU3OWY5ZDhlN2I0MTZjZTgxYTM6NTFiNDI5OTZmNTlkNzk1ZjEyYzgwYzQ1YWM0ZjRmZmU=' \
+   -H 'Connection: keep-alive' \
+   -H 'Content-Type: application/json' \
+   -d '{"text": "Once upon a time I was reading the docs"}'
+````
+
+</CodeGroup>
