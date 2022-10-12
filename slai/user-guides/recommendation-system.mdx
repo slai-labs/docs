@@ -1,0 +1,243 @@
+---
+title: "Recommendation System"
+---
+
+In this example, let's train a movie recommendation system on Slai, and deploy the finished model as a REST API.
+
+We're using the [MovieLens dataset](https://grouplens.org/datasets/movielens/), which contains a large number of movie ratings by users.
+
+We'll start by uploading the dataset to Slai.
+
+![Upload data](/img/user-guides/upload-data.png)
+
+Here, we have uploaded the data directly to the Slai model sandbox as a static file. However, in a real world use case, we can take advantage of Slai’s many integrations with external dynamic data sources, such as S3, BigQuery, and Snowflake. This allows us to continuously ingest new data, retrain the model, and deploy updates.
+
+<Note>
+Here, we have uploaded the data directly to the Slai model sandbox as a static file.
+
+However, for a real world use case, you may want to take advantage of Slai’s many integrations with external dynamic data sources, such as S3, BigQuery, and Snowflake.
+
+</Note>
+
+### Exploring the data
+
+It is important to gain an understanding of the dataset before beginning to design or train a model. This stage is often referred to as exploratory data analysis, or EDA. Conveniently, the Slai sandbox includes a built-in notebook, the EDA tool of choice for most data scientists.
+
+For example, we can visualize sample counts for both users and movies using a histogram. In this case, we see that the highest density of both users and movies have had a relatively small number of interactions. This motivates us to use a smaller embedding size to prevent overfitting.
+
+### Movielens dataset
+
+Now onto the code - to start, let’s take a look at the `MovielensDataset` class. This class implements the PyTorch dataset interface, allowing our custom data preparation logic to be easily integrated into standard data loading and training routines.
+
+We load all user ratings from the source CSV, organize by user, and split temporally into a “train” and “test” set
+
+```python
+for u in users:
+  # split train/test temporally for each user
+  user_movies = df[df["userId"] == u]
+  user_movies = user_movies.sort_values(by="timestamp")
+  self.user_movies[u] = set(user_movies.movieId)
+
+  train_count = int(math.floor(train_size * len(user_movies)))
+  if train:
+    user_movies = user_movies.head(train_count)
+  else:
+    user_movies = user_movies.tail(len(user_movies) - train_count)
+```
+
+To simplify the problem we assume that any rating or interaction between a user and a movie is a binary “1”. We also generate a fixed set of negative samples for each user from movies they have not seen.
+
+```python
+# negative samples
+neg = 0
+while neg < negatives:
+  m = random.choice(movies)
+  if m in used:
+    continue
+  self.users.append(u)
+  self.movies.append(m)
+  self.labels.append(0)
+  used.add(m)
+  neg += 1
+```
+
+By preprocessing the dataset, we have formed a simpler problem – given a user ID and movie ID, predict whether they interacted. The intention, of course, being that the model will also learn to predict high scores for movies that the user would be likely to interact with in the future.
+
+### Building the neural network
+
+Next, let’s dig into the most interesting section of this code, the neural net definition.
+
+We use an embedding layer for both the user and movie, to compress the respective one-hot encoded vectors into rich, compact representations that are easier to model.
+
+These two representations are concatenated into a single vector and then passed into a simple fully connected neural network.
+
+```python
+class NCF(nn.Module):
+  def __init__(self, num_users, num_items):
+  super().__init__()
+  self.user_embedding = nn.Embedding(num_embeddings=num_users, embedding_dim=8)
+  self.item_embedding = nn.Embedding(num_embeddings=num_items, embedding_dim=8)
+  self.fc1 = nn.Linear(in_features=16, out_features=64)
+  self.fc2 = nn.Linear(in_features=64, out_features=32)
+  self.output = nn.Linear(in_features=32, out_features=1)
+```
+
+For the forward pass, the user and item IDs are first projected to the user and item embeddings respectively.
+
+These vectors are then concatenated and passed into the series of dense layers. After each fully connected inner layer, we apply ReLu activation (promote nonlinear learning) and dropout (prevent overfitting). Finally, we pass this into a linear output layer with sigmoid activation function to predict a single probability value between zero and one.
+
+```python
+def forward(self, user, item):
+  # embedding
+  u = self.user_embedding(user)
+  i = self.item_embedding(item)
+  x = torch.cat([u, i], dim=-1)
+
+  # dense layers
+  x = self.fc1(x)
+  x = F.relu(x)
+  x = F.dropout(x, p=0.2, training=self.training)
+  x = self.fc2(x)
+  x = F.relu(x)
+  x = F.dropout(x, p=0.2, training=self.training)
+
+  # output
+  x = self.output(x)
+  x = F.sigmoid(x)
+  return x
+```
+
+To begin the training process, the model weights are randomly initialized. Though it would certainly be possible to pre-train the embedding layers on any other meaningful information about the users or movies that was available.
+
+We use an Adam optimizer with a binary cross entropy loss function to minimize error in predicting interactions between users and movies.
+
+The training data is shuffled and processed in batches, until all samples have been seen. This is repeated for 20 epochs.
+
+### What's our hit rate?
+
+Evaluation and comparison of recommender systems can be difficult. The loss function is usually not directly meaningful for actual performance and can vary largely in value based on training approach and model.
+
+One common metric that is easy to compute and interpret generically across systems is “hit rate” - basically, given N total samples, including 1 positive sample, what is the probability that the positive sample will appear in the top K results. We can refer to this as “hit rate @ K / N”.
+
+```python
+# hit rate @ 10
+k = 10
+total = 1000
+hit_thresholds = {}
+for u in unique_users:
+  negatives = random.sample(
+    [
+      m
+      for m in unique_movies
+      if m not in dataset_test_positives.user_movies[u]
+    ],
+    total,
+  )
+  negatives = torch.tensor(negatives).to(device)
+  user = torch.tensor([u] * total).to(device)
+  output = model(user, negatives)
+  top_k = torch.topk(output.flatten(), k)
+  hit_thresholds[u] = top_k.values[k - 1].item()
+```
+
+### Training the model
+
+To execute the actual model training on Slai, we have a few options. The simplest is just running a single job to immediately train and package a new model. This is a convenient option for tutorials and during development.
+
+Alternatively we can schedule a recurring training job for continuous learning. This is an extremely powerful option in a production setting, when training on a dynamic dataset, or for long running jobs.
+
+### Writing the handler
+
+The handler is the code that actually receives and processes an incoming request to the deployed model. Slai allows us to customize this handler logic, meaning we can implement some interesting functionality natively in the API, without any need for wrapping calls or an additional backend.
+
+As an example, here we have built an endpoint to return the top N unseen movie recommendations for a specific user. This is accomplished by loading the user viewing history, filtering out any previously viewed movies, scoring all unseen movie candidates, then returning the top N results.
+
+```python
+def call(self, model, **inputs):
+  user = int(inputs["user"])
+  n = int(inputs["n"])
+
+
+  # gather all items that user has not interacted with
+  unseen = torch.tensor(
+    [m for m in self.movies.index if m not in self.dataset.user_movies[user]]
+  )
+
+  # predict recommendation scores
+  pred = model(torch.tensor([user] * len(unseen)), unseen)
+  top_k = torch.topk(pred.flatten(), n)
+
+  # format scores usable results
+  recs = []
+  for i, score in zip(top_k.indices, top_k.values):
+    m = unseen[i].item()
+    recs.append(
+      {
+        "title": self.movies.loc[m].title,
+        "genres": self.movies.loc[m].genres,
+        "movie_id": m,
+        "score": score.item(),
+      }
+    )
+  return {"recommendations": recs}
+```
+
+### Local testing
+
+Slai also provides hooks to implement testing and validation of the trained model and request handler. In this movie recommender example, we have created tests to verify output schema, high scoring recommendations, unique results between users, and unseen recommendations.
+
+```python
+def test(model):
+  # do inference
+  pred = model(user=42, n=10)["recommendations"]
+  print(json.dumps(pred[0:3], indent=2))
+
+  # check valid format
+  assert len(pred) == 10
+  for p in pred:
+    assert all([key in p for key in ["title", "genres", "movie_id", "score"]])
+  print("format OK")
+```
+
+This test suite can be run to facilitate development, test the handler, or to verify a newly trained model.
+
+### Deploying
+
+Finally, deploying our newly trained model is as easy as a few clicks. Simply hit “publish and deploy” to package the model artifact, stand up a new inference service, and expose the endpoint to the world.
+
+Once this is live, we can immediately start making requests from the client side.
+
+```python
+import slai
+
+slai.login(client_id="xxx", client_secret="xxx")
+model = slai.model("movielens-recommender/initial")
+prediction = model(user=42, user=10)
+```
+
+Which will return movie recommendations for our user:
+
+```json
+[
+  {
+    "title": "Contact (1997)",
+    "genres": "Drama|Sci-Fi",
+    "movie_id": 1584,
+    "score": 0.9960916638374329
+  },
+  {
+    "title": "Aladdin (1992)",
+    "genres": "Adventure|Animation|Children|Comedy|Musical",
+    "movie_id": 588,
+    "score": 0.9957982897758484
+  },
+  {
+    "title": "Toy Story (1995)",
+    "genres": "Adventure|Animation|Children|Comedy|Fantasy",
+    "movie_id": 1,
+    "score": 0.9957544803619385
+  }
+]
+```
+
+[You can view the sandbox for this tutorial here](https://www.slai.io/s/r51xu). We're excited to see what you build!

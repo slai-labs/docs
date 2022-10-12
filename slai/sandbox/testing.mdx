@@ -1,0 +1,52 @@
+---
+title: "Testing"
+description: "Interactively testing a model in the sandbox."
+---
+
+Slai provides two ways to test your models:
+
+1. Unit Tests
+2. E2E tests with the test console
+
+## Writing Unit Tests
+
+You can write unit tests for your models in `test.py`. For example, a basic test suite to verify the output of your model might look like this:
+
+```python
+def test(model):
+
+  example_input = "This model generates text"
+  model_response = model(text=example_input)["generated_text"]
+
+  assert(model_response is not None)
+  assert(isinstance(model_response, str))
+  assert(len(model_response) > 10)
+```
+
+You can run your tests by clicking the **Test** button in the sandbox.
+
+![Test button](/img/sandbox/testing/test-button.png)
+
+### Running E2E Tests
+
+Slai also provides an interactive test client based on the input and output data types you define in the `handler.py` file.
+
+For example, suppose we've defined a single string field as input, and two string fields as output.
+
+```python
+inputs = {"text": slai.types.String()}
+
+outputs = {"generated_text": slai.types.String(), "sentiment": slai.types.String()}
+```
+
+The test console would generate a schema based on the handler fields defined above:
+
+![Schema based on fields](/img/sandbox/testing/schema-based-on-fields.png)
+
+### Running Tests Against Deployed Models
+
+If you've already deployed your model, you can run your test against the live model in the **Request Type** toggle menu.
+
+**Development** runs the test against the current model in the sandbox. **Live** runs the test against the deployed model.
+
+![Live vs. Development](/img/sandbox/testing/live-deployment.png)

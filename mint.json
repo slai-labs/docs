@@ -1,0 +1,113 @@
+{
+  "name": "Slai",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#477ff7",
+    "light": "#93c5fd",
+    "dark": "#2563eb",
+    "ultraLight": "#dbeafe",
+    "ultraDark": "#1e40af"
+  },
+  "topbarCtaButton": {
+    "name": "Start a new project",
+    "url": "https://www.slai.io/launchpad"
+  },
+  "topbarLinks": [
+    {
+      "name": "Dashboard",
+      "url": "https://www.slai.io/models"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Launchpad",
+      "icon": "rocket-launch",
+      "color": "#6365f1",
+      "url": "https://www.slai.io/launchpad"
+    },
+    {
+      "name": "Chat with us",
+      "icon": "comment-dots",
+      "color": "#06b5d4",
+      "url": "https://calendly.com/elimernit/slai-discovery-call"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Home",
+      "pages": ["slai"]
+    },
+    {
+      "group": "Sandbox",
+      "pages": [
+        "slai/sandbox/train",
+        "slai/sandbox/model-handler",
+        "slai/sandbox/testing",
+        "slai/sandbox/datasets",
+        "slai/sandbox/model-versions",
+        "slai/sandbox/environment",
+        "slai/sandbox/deployments"
+      ]
+    },
+    {
+      "group": "Integrations",
+      "pages": [
+        "slai/integrations/import-code-from-github",
+        "slai/integrations/shipping-metrics-outside-slai",
+        "slai/integrations/slack-notifications",
+        "slai/integrations/connecting-s3-buckets",
+        "slai/integrations/connecting-bigquery"
+      ]
+    },
+    {
+      "group": "User Guides",
+      "pages": [
+        "slai/user-guides/advanced-deployment-options",
+        "slai/user-guides/custom-docker-images",
+        "slai/user-guides/migrating-an-existing-model",
+        "slai/user-guides/pre-trained-models",
+        "slai/user-guides/recommendation-system"
+      ]
+    },
+    {
+      "group": "Dashboard",
+      "pages": [
+        "slai/dashboard/usage-based-billing",
+        "slai/dashboard/keys",
+        "slai/dashboard/secrets-management"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": ["slai/api-reference/model"]
+    },
+    {
+      "group": "Security",
+      "pages": [
+        {
+          "group": "Terms and Conditions",
+          "pages": [
+            "slai/security/terms-and-conditions/platform-terms-and-conditions",
+            "slai/security/terms-and-conditions/website-terms-of-service"
+          ]
+        },
+        "slai/security/privacy-policy"
+      ]
+    }
+  ],
+  "footerSocials": [
+    {
+      "type": "website",
+      "url": "https://slai.io"
+    }
+  ],
+  "analytics": {
+    "logrocket": {
+      "appId": "tmarkn/slai-production"
+    }
+  }
+}

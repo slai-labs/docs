@@ -1,0 +1,70 @@
+---
+title: "Handler"
+description: "Building logic around a hosted model."
+---
+
+The `handler.py` file is a core building block in Slai. Model handlers serve as the entry point to hosted models.
+
+Handlers can be used to:
+
+- Validate the input and output data for your model
+- Add pre and post-processing logic around your model
+- Log inference results to a third-party tool, such as Weights and Biases
+- Retrieve and update model embeddings
+- Call third-party APIs
+
+Here's an example `handler.py` file.
+
+```python
+import slai
+
+
+class ModelHandler(slai.BaseModelHandler):
+    inputs = {"text": slai.types.String()}
+
+    outputs = {"generated_text": slai.types.String(), "sentiment": slai.types.String()}
+
+    # When serving the model, the model is first loaded into memory
+    # The loaded model is then available in the "call" method
+    def load(self, model=None):
+        loaded_model = model
+        return loaded_model
+
+    # This is the entry point for your API
+    def call(self, model, **inputs):
+        gpt2_model = model["gpt2_model"]
+        sentiment_model = model["sentiment_analysis_model"]
+
+        gpt2_prediction = gpt2_model(
+            inputs["text"], max_length=10, num_return_sequences=1
+        )[0]["generated_text"]
+        sentiment_prediction = sentiment_model(gpt2_prediction)[0]["label"]
+
+        return {"generated_text": gpt2_prediction, "sentiment": sentiment_prediction}
+```
+
+There are four things you need to define inside your model handler:
+
+- `inputs`: Defines the input data that will be passed to your API. This must be a dictionary containing the names and data types of your model inputs. In the example above, we are specifying that the inputs to this API are three float variables with the names: age, weight, and height
+- `outputs`: Defines the output data that will be returned from your API. This must be a dictionary containing the names and data types of your model outputs. In the example above, we are specifying that the output from this model is one float with the name: prediction
+- `load`: This function lets you perform any kind of operations you want to only happen once when your API is first deployed. You can also use this method to load a pre-trained model if you're not using Slai for training. The model parameter contains the model artifact that was produced during training. If you did not train, this variable will be empty.
+- `call`: The entry point to your API. In this function, you have access to any artifacts that were produced during training, as well as the inputs defined above. The return value of this function must be a dictionary matching the types specified in the outputs dictionary.
+
+The slai library includes several basic data types that can be used to validate your inputs against.
+
+## Input and Output Types
+
+| Class                                                 | Description                                                                                        |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| **slai.types.Float()**                                | Standard floating point value                                                                      |
+| **slai.types.String(**max_length=None**)**            | A string field, with an optional max_length parameter                                              |
+| **slai.types.Tensor(**shape=None, dtype=None**)**     | A torch tensor object, with optional shape and dtype parameters                                    |
+| **slai.types.Dataframe()**                            | A pandas dataframe object                                                                          |
+| **slai.types.NumpyArray(**shape=None, dtype=None**)** | A numpy array, with optional shape and dtype parameters                                            |
+| **slai.types.Binary()**                               | A binary object, for example a video file or anything that doesn't fit into the other types listed |
+| **slai.types.Image(**raw=False**)**                   | A generic image, automatically serialized into a PIL object for use in the handler.                |
+
+<Note>
+  Types can be labeled optional by passing in `required=false`
+  `slai.types.Boolean(required=false)` `slai.types.Dataframe(required=false)`
+</Note>

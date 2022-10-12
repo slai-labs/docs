@@ -1,0 +1,20 @@
+---
+title: "Revisions"
+description: "An introduction to model revisions on Slai."
+---
+
+## What's a revision?
+
+Revisions in Slai are similar to branches in git. For each model, you can have several revisions, each with a unique name.
+
+Each revision has its own sandbox, model handler, and model artifacts. When you're working on a particular model, you're always working on a specific revision of that model. The default starting revision is named _initial_. You can see and create revision from the drop-down next to the model name at the top of your sandbox:
+
+![Revisions](/img/sandbox/revisions/revisions.png)
+
+It is important to note that each revision can only have **one deployment running** at any given time.
+
+Why might you want to revision? Here are a few use cases to get you started:
+
+- **A/B testing model performance**: Create a revision and train a variant of the original. Deploy each revision, divide traffic between the two models, and see how they perform against each other.
+- **Collaborate with your team**: Signal what you're working on with a descriptive branch name. For example `ignore-outliers` or `broaden-dataset`
+- **Creating a set of similar, but slightly different models**: You might start with a strong general image classifier like ImageNet and concurrently deploy several variations that make different tradeoffs.

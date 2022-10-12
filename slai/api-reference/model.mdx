@@ -1,0 +1,49 @@
+---
+title: "Model"
+description: "The model class is the entry point for your deployed model."
+---
+
+Once a model is deployed, you can call it using the model class:
+
+```python
+import slai
+
+slai.login(client_id="CLIENT_ID", client_secret="CLIENT_SECRET")
+my_model = slai.model("username/model/model_version")
+
+result = my_model(input_1=100, input_2=200)
+print(result)
+```
+
+## The Model Object
+
+**constructor**(model route: **str**) - takes in a model _route_, which is essentially a path to the deployed model, formatted as follows:
+
+```python
+model = slai.model("<username>/<model_name>/<model_branch>")
+```
+
+the model_branch part of the route is optional; if left out the deployment will route to the **initial** branch of the model.
+
+**model**(inputs) - call the deployed model, returning inference results. Any input data defined in your model handler class can be passed as keyword arguments to the model, for example:
+
+```python
+>> model = slai.model("<username>/<model_name>/<model_branch>")
+>> result = model(input_1=100.0, input_2=2000.0)
+>> result
+{
+    "result": [0.3434, 0.4343]
+}
+```
+
+**info**() - returns the input data required by the model, this is defined by your model handler class. For example:
+
+```python
+>> model = slai.model("<username>/<model_name>/<model_branch>")
+>> inputs = model.info()
+>> inputs
+{
+    "input_1": "float"
+    "input_2": "tensor"
+}
+```

@@ -1,0 +1,35 @@
+---
+title: "Shipping Metrics Outside Slai"
+description: "Shipping metrics to a third party tool is fairly straightforward. In this example, we'll log our training metrics to Weights and Biases (WandB) to track our experiments."
+---
+
+## Add your WandB API key to Slai
+
+You can add your WandB API key to the [Slai Secrets Manager](/dashboard/secrets-management). If you don't yet have a WandB account, [you can signup for one here](/slai).
+
+![Secrets Manager](/img/secrets_manager.png)
+
+## Import the API key in the sandbox
+
+You can access stored secrets in your sandbox through the `os.environ` object. We'll login to WandB with our API key:
+
+```python
+wandb.login(key=os.environ['SLAI_WANDB_API_KEY'])
+```
+
+## Logging metrics during training
+
+To log metrics directly to WandB, you can add the following code to your training script. The `wandb.log()` method will record whatever data you wish to pass in during your training process.
+
+```python
+import wandb
+
+wandb.login(key=os.environ['SLAI_WANDB']) # add your own API key
+
+def train():
+  for x in range(10):
+    run = wandb.init(reinit=True)
+    for y in range (100):
+      wandb.log({"metric": x+y})
+    run.finish()
+```

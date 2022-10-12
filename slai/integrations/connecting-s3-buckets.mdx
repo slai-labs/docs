@@ -1,0 +1,40 @@
+---
+title: "Connecting S3 Buckets"
+description: "Slai comes with several integrations to import data from remote data stores, like S3 buckets. This guide explain how to connect an S3 bucket and use it in your sandbox."
+---
+
+### Connecting an Integration
+
+Integrations live at the root level of Slai, which makes them accessible from any sandbox in your account. To create an integration, click the **Integrations** tab on the sidebar [on your dashboard.](https://slai.io/models)
+
+![Integrate Sidebar](/img/integrations/s3/integrate-sidebar.png)
+
+You'll be presented with a list of existing integrations, if any exist. Click **Add Integration** to create a new one.
+
+![Add S3](/img/integrations/s3/add-s3.png)
+
+You'll be prompted to enter a name, bucket name, AWS region, access key, and secret access key.
+
+![AWS information](/img/integrations/s3/aws-info.png)
+
+Click **Create Connection**, and you'll see your new integration added to the Integrations list.
+
+![S3 Added](/img/integrations/s3/s3-added.png)
+
+### Using Bucket Contents
+
+In the **Data Section** of the sandbox, click the **\+** icon to create a new datasource. Select **Import from Integration**.
+
+![Upload AWS data](/img/integrations/s3/upload-data.png)
+
+You'll be prompted to select from a list of integrations connected to your account. Let's select the bucket we just created.
+
+![Select Bucket](/img/integrations/s3/select-bucket.png)
+
+After selecting the integration, the data will be downloaded to the **Data Section** of the sandbox. You can use the data from your bucket like any ordinary folder or file.
+
+![Bucket](/img/integrations/s3/bucket.png)
+
+To use the data in your model, click **Copy Path** and paste the path into the sandbox.
+
+![Copy path](/img/integrations/s3/copy-path.png)
