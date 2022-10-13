@@ -86,6 +86,10 @@
       "pages": ["api-reference/model"]
     },
     {
+      "group": "Pricing",
+      "pages": ["pricing/usage-based-billing"]
+    },
+    {
       "group": "Security",
       "pages": [
         {
