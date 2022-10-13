@@ -39,51 +39,51 @@
   "navigation": [
     {
       "group": "Home",
-      "pages": ["slai"]
+      "pages": ["introduction"]
     },
     {
       "group": "Sandbox",
       "pages": [
-        "slai/sandbox/train",
-        "slai/sandbox/model-handler",
-        "slai/sandbox/testing",
-        "slai/sandbox/datasets",
-        "slai/sandbox/model-versions",
-        "slai/sandbox/environment",
-        "slai/sandbox/deployments"
+        "sandbox/train",
+        "sandbox/model-handler",
+        "sandbox/testing",
+        "sandbox/datasets",
+        "sandbox/model-versions",
+        "sandbox/dependencies",
+        "sandbox/deployments"
       ]
     },
     {
       "group": "Integrations",
       "pages": [
-        "slai/integrations/import-code-from-github",
-        "slai/integrations/shipping-metrics-outside-slai",
-        "slai/integrations/slack-notifications",
-        "slai/integrations/connecting-s3-buckets",
-        "slai/integrations/connecting-bigquery"
+        "integrations/import-code-from-github",
+        "integrations/shipping-metrics-outside-slai",
+        "integrations/slack-notifications",
+        "integrations/connecting-s3-buckets",
+        "integrations/connecting-bigquery"
       ]
     },
     {
       "group": "User Guides",
       "pages": [
-        "slai/user-guides/advanced-deployment-options",
-        "slai/user-guides/custom-docker-images",
-        "slai/user-guides/migrating-an-existing-model",
-        "slai/user-guides/pre-trained-models",
-        "slai/user-guides/recommendation-system"
+        "user-guides/advanced-deployment-options",
+        "user-guides/custom-docker-images",
+        "user-guides/migrating-an-existing-model",
+        "user-guides/pre-trained-models",
+        "user-guides/recommendation-system"
       ]
     },
     {
       "group": "Dashboard",
       "pages": [
-        "slai/dashboard/usage-based-billing",
-        "slai/dashboard/keys",
-        "slai/dashboard/secrets-management"
+        "dashboard/usage-based-billing",
+        "dashboard/keys",
+        "dashboard/secrets-management"
       ]
     },
     {
       "group": "API Reference",
-      "pages": ["slai/api-reference/model"]
+      "pages": ["api-reference/model"]
     },
     {
       "group": "Security",
@@ -91,11 +91,11 @@
         {
           "group": "Terms and Conditions",
           "pages": [
-            "slai/security/terms-and-conditions/platform-terms-and-conditions",
-            "slai/security/terms-and-conditions/website-terms-of-service"
+            "security/terms-and-conditions/platform-terms-and-conditions",
+            "security/terms-and-conditions/website-terms-of-service"
           ]
         },
-        "slai/security/privacy-policy"
+        "security/privacy-policy"
       ]
     }
   ],
