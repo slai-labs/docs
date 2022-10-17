@@ -34,6 +34,12 @@
       "icon": "comment-dots",
       "color": "#06b5d4",
       "url": "https://calendly.com/elimernit/slai-discovery-call"
+    },
+    {
+      "name": "Migrate Your Model",
+      "icon": "comments",
+      "color": "#6365f1",
+      "url": "https://docs.slai.io/user-guides/migrating-an-existing-model"
     }
   ],
   "navigation": [
@@ -66,17 +72,17 @@
     {
       "group": "User Guides",
       "pages": [
-        "user-guides/advanced-deployment-options",
-        "user-guides/custom-docker-images",
         "user-guides/migrating-an-existing-model",
         "user-guides/pre-trained-models",
+        "user-guides/advanced-deployment-options",
+        "user-guides/custom-docker-images",
         "user-guides/recommendation-system"
       ]
     },
     {
       "group": "Dashboard",
       "pages": [
-        "dashboard/usage-based-billing",
+        "dashboard/tracking-usage",
         "dashboard/keys",
         "dashboard/secrets-management"
       ]
@@ -112,6 +118,9 @@
   "analytics": {
     "logrocket": {
       "appId": "tmarkn/slai-production"
+    },
+    "ga4": {
+      "measurementId": "G-XN1SS41L9X"
     }
   }
 }
