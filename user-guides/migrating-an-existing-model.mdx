@@ -3,19 +3,21 @@ title: "Migrating an existing model"
 description: "Already have a model you'd like to migrate to Slai? Here's how to port it over."
 ---
 
-One of our core beliefs is around consistency - this means that we define a method that serves as a common entry point for training your model: `train()`, in `train.py`. This method must return a valid model artifact for our system to detect what framework you're using.
+<Card title="Want us to help migrate your models?" icon={duotone("link")} href="https://calendly.com/elimernit/60min">
+  You can book a 60 min call with our engineering team, and we'll get your models running by the end of the call.
+</Card>
 
-Porting a model generally takes just a few minutes of refactoring. At a high level, the steps are:
+Porting a model generally takes 10-20 minutes of refactoring. At a high level, the steps are:
 
 1. Create an empty sandbox
-2. Install python requirements
-3. (Optional) Upload pre-trained weights to the data folder (if you want to avoiding connecting your dataset and retraining the model from scratch)
-4. Copy the model's code into the sandbox, returning your model class from the `train.py` function
+2. [Install Python Requirements](/sandbox/dependencies)
+3. (_Optional_) Upload pre-trained weights to the [data folder](/sandbox/datasets) (if you want to avoiding connecting your dataset and retraining the model from scratch)
+4. Copy the model's code into the sandbox, returning your model class from the [`train.py` function](/sandbox/train)
 5. Train the model
-6. Create your model handler (see: [Handler](/sandbox/model-handler))
-7. Package and deploy
+6. Create your [model handler](/sandbox/model-handler)
+7. [Package and deploy](/sandbox/deployments)
 
-**An example: Basic scikit-learn model**
+## Example: Basic Scikit-Learn Model 
 
 <embed
   class="w-full aspect-video rounded-lg shadow-lg"
