@@ -1,0 +1,45 @@
+---
+title: "Debugging Guide"
+---
+
+This page contains instructions to debug common errors.
+
+We try to make our product intuitive, but there are still cases where things get confusing or just don't work. This page is a guide to debug the rough edges that people sometimes experience when using the product.
+
+## Making a test request in the sandbox
+
+<Accordion title="AttributeError: 'NoneType' object has no attribute">
+  You need to train your model before invoking it. Click **Train** to load the
+  model into memory before making an invocation.
+</Accordion>
+
+## Installing dependencies
+
+<Accordion title="ModuleNotFoundError">
+  Make sure your Python dependencies are added to the **Dependencies** section.
+  If you need to customize your container, you can use `setup.sh`, but please
+  try to install dependencies in the dependencies section first.
+</Accordion>
+
+## Calling the API
+
+<Accordion title="400 responses">
+  Make sure your request includes the fields you defined in `handler.py`. The
+  handler will enforce whichever fields you specify - if your handler expects to
+  receive a string field, it will return a 400 if you pass in a float.
+</Accordion>
+
+<Accordion title="404 responses">
+  This can happen when the `slai-cli` SDK is outdated. Run `pip install
+  --upgrade slai-cli` to upgrade to the latest version.
+</Accordion>
+
+## Additional Support
+
+<Card
+  title="Is your issue not covered here?"
+  icon={duotone("link")}
+  href="http://calendly.com/elimernit/30min"
+>
+  Please reach out to us. We will help you fix it.
+</Card>

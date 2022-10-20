@@ -96,6 +96,10 @@
       "pages": ["pricing/usage-based-billing"]
     },
     {
+      "group": "Resources",
+      "pages": ["resources/debugging-guide"]
+    },
+    {
       "group": "Security",
       "pages": [
         {
