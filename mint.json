@@ -44,7 +44,8 @@
     {
       "name": "Beam",
       "icon": "satellite-dish",
-      "url": "beam"
+      "url": "beam",
+      "isDefaultHidden": true
     }
   ],
   "navigation": [
