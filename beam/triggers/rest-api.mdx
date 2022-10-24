@@ -1,0 +1,47 @@
+---
+title: "REST API"
+description: "Deploying a Beam app as a REST API"
+---
+
+### Deploying an app
+
+Beam apps can be deployed using the `RestAPI` trigger. Here's an example of what
+this might look like:
+
+```python
+app.Trigger.RestAPI(
+	inputs={"x": beam.Types.Float(), "y": beam.Types.Float()},
+	outputs={"sum": beam.Types.Float()},
+	handler="test.py:add_numbers",
+)
+```
+
+| Name      | Type     | Description                                               |
+| --------- | -------- | --------------------------------------------------------- |
+| `inputs`  | _dict_   | A dictionary specifying the interface for the API         |
+| `outputs` | _dict_   | A dictionary specifying the outputs returned from the API |
+| `handler` | _string_ | The function that will be run when the API is invoked     |
+
+### Beam Types
+
+The **beam** library includes several basic data types that can be used to
+validate your inputs against.
+
+| beam.types.Float()                                    | Standard floating point value                                                                      |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| **beam.types.String(**max_length=None**)**            | A string field, with an optional max_length parameter                                              |
+| **beam.types.Boolean()**                              | Standard boolean value                                                                             |
+| **beam.types.Tensor(**shape=None, dtype=None**)**     | A torch tensor object, with optional shape and dtype parameters                                    |
+| **beam.types.Dataframe()**                            | A pandas dataframe object                                                                          |
+| **beam.types.NumpyArray**(shape=None, dtype=None**)** | A numpy array, with optional shape and dtype parameters                                            |
+| **beam.types.Binary()**                               | A binary object, for example a video file or anything that doesn't fit into the other types listed |
+| **beam.types.Image(**raw=False**)**                   | A generic image, automatically serialized into a PIL object for use in the handler                 |
+
+<Info>
+Types can be labeled optional by passing in `required=false`
+
+`beam.types.Boolean(required=false)`
+
+`beam.types.Dataframe(required=false)`
+
+</Info>

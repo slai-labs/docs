@@ -1,0 +1,129 @@
+---
+title: "Deploying an ML Model"
+description:
+  "A short tutorial on building a sentiment analysis model and deploying it as a
+  REST API with Beam"
+---
+
+### Define the environment
+
+The first thing we'll do is define the environment that our app will run on. For
+this example, we're building a Sentiment Analysis model using Huggingface.
+
+First, create a file with your Beam App definition. You can name this whatever
+you want. In this example, we'll call it `app.py`.
+
+```python app.py
+import beam
+
+app = beam.App(
+    name="sentiment-analysis",
+    cpu=4,
+    memory="4Gi",
+    gpu=0,
+    apt_install=[],
+    python_version="python3.9",
+    python_packages=["transformers", "torch"],
+)
+```
+
+### Invoking the Huggingface Model
+
+Now, we'll write some code to predict the sentiment of a given text prompt.
+Create a new file. Again, you can name this whatever you want. We'll name ours
+`inference.py`
+
+Our function takes keyword arguments, as `(**inputs)`.
+
+```python inference.py
+from transformers import pipeline
+
+def predict_sentiment(**inputs):
+    model = pipeline(
+        "sentiment-analysis", model="siebert/sentiment-roberta-large-english"
+    )
+    result = model(inputs["prompt"], truncation=True, top_k=1)
+    prediction = {i["label"]: i["score"] for i in result}
+
+    print(prediction)
+
+    return prediction
+```
+
+### Setting a REST API Trigger
+
+To deploy the API, we'll create a REST API **Trigger** in our `app.py`.
+
+Our trigger requires three things:
+
+- **Inputs -** _the name and type of all_ **_inputs_** _to the API_
+
+- **Outputs** \- _the name and type of all_ _**outputs**_ _returned from the
+  API_
+
+- **Handler** \- _the file and function to be invoked when the API is called_
+
+Add the following lines to your `app.py` file:
+
+```python app.py
+app.Trigger.RestAPI(
+    inputs={"text": beam.Types.String()},
+    outputs={"prediction": beam.Types.String()},
+    handler="inference.py:predict_sentiment",
+)
+```
+
+The complete `app.py` file will look like this:
+
+```python app.py
+import beam
+
+app = beam.App(
+    name="sentiment-analysis",
+    cpu=4,
+    memory="4Gi",
+    gpu=0,
+    apt_install=[],
+    python_version="python3.9",
+    python_packages=["transformers", "torch"],
+)
+
+app.Trigger.RestAPI(
+    inputs={"text": beam.Types.String()},
+    outputs={"prediction": beam.Types.String()},
+    handler="inference.py:predict_sentiment",
+)
+```
+
+### Deploying the app
+
+To deploy the model, enter your terminal and `cd` to the directory you're
+working on.
+
+Then, run the following:
+
+```
+beam deploy app.py
+```
+
+Once you deploy, you'll see the following console output:
+
+![](/img-beam/beam/getting-started/call-api.png)
+
+At the bottom of the console, you'll see a URL for invoking your function.
+Here's what a cURL request would look like:
+
+```bash
+curl -X POST --compressed https://beam.eng-stage.slai.io/dzzf3/ \
+ -H 'Accept: \*/\*' \
+ -H 'Accept-Encoding: gzip, deflate' \
+ -H 'Authorization: Basic ZGQ2MzY3NGMyZmYwYzMwNjU1YTM1ODVkM2I4OTQzYmE6ZDIwNWJhMTk1ZGQ2ZTdmZDFjNDE5ODQyYjQ1Nzk0YTY=' \
+ -d '{"text": "I think baseball is overrated"}'
+```
+
+<Note>
+**The requests are authenticated with basic auth.** For the beta, your credentials are simply: `Username: user` and `Password: user`
+
+</Note>
+
+Congrats - you just deployed your first function on Beam!

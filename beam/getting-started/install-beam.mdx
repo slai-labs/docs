@@ -1,0 +1,24 @@
+---
+title: "Install Beam"
+---
+
+1. [Create a Slai account](https://www.slai.io/login) and get your
+   [API keys from the dashboard](https://www.slai.io/settings/api-keys).
+
+2. In a terminal, install the Beam CLI:
+
+```bash
+curl https://raw.githubusercontent.com/slai-labs/get-beam/main/get-beam.sh -sSfL | sh
+```
+
+3. Run `beam configure` \- you'll be prompted to enter your API keys set up a
+   profile with API keys.
+
+4. Set up a new folder wherever you want and create a virtual env:
+   `python3 -m virtualenv .venv`
+
+5. Source virtual env: `source .venv/bin/activate`
+
+6. Install Beam SDK: `pip install beam-sdk`
+
+Now you're ready to start developing!
