@@ -37,9 +37,11 @@ app.Trigger.Webhook(
 
 We'll write a simple function that takes a prompt passed from the user, and returns an image generated from Stable Diffusion.
 
+<Warning>You need an access token from [Huggingface](https://huggingface.co) to run this example. You can sign up for Huggingface and access your token on [the settings page](https://huggingface.co/settings/tokens).</Warning>
+
 You'll notice the `image.save()` method below. Since we defined a file path called `output.png` in our `app.py` file above, that's where our images will be saved when invoking this function.
 
-```python
+```python run.py
 import torch
 from torch import autocast
 from diffusers import StableDiffusionPipeline
@@ -51,7 +53,8 @@ def generate_image(**inputs):
         "CompVis/stable-diffusion-v1-4",
         torch_dtype=torch.float16,
         revision="fp16",
-        use_auth_token="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",
+        # Add your own access token from Huggingface
+        use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
     ).to("cuda")
 
     prompt = inputs["prompt"]
