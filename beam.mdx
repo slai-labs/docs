@@ -3,9 +3,26 @@ title: "Introduction"
 description: "Beam is a rapid prototyping framework for data projects. It's the fastest way to get your data projects running in the cloud."
 ---
 
+<Warning>Beam is in private beta. If you're reading this, you're one of the first people to try it!</Warning>
+
+
+# Get started with an example
+
+<Card title="Stable Diffusion on GPU" icon="layer-group" href="beam/getting-started/stable-diffusion-gpu">
+  Deploy Stable Diffusion using a GPU
+</Card>
+
+<Card title="Web Scraping" icon="ghost" href="beam/getting-started/running-a-web-scraper">
+  Scraping a website and running the results through an ML model
+</Card>
+
+<Card title="Huggingface REST API" icon="bolt" href="beam/getting-started/deploying-an-ml-model">
+  Deploying a pre-trained ML model as a REST API
+</Card>
+
 ### Why use Beam?
 
-- You hate reading AWS documentation
+- You hate reading AWS / GCP documentation
 
 - Your M1 laptop can't handle heavy computation, like training a transformer model
 
@@ -17,21 +34,21 @@ description: "Beam is a rapid prototyping framework for data projects. It's the 
 
 ### Beam is like AWS Lambda, optimized for data projects
 
+- Develop in your local IDE while running on remote hardware
+
+- Configure your runtime in Python. You can specify as many GPU/CPUs as you want.
+
 - Scale from experimenting to serving in production
 
-- Develop in local VSCode while running on remote hardware
+- Hot reloads. Make a change locally and instantly get a production endpoint.
 
-- Hot reloading - make a change locally and instantly get a production endpoint
-
-- Configure your runtime in Python code - you can specify however many GPU/CPUs you want!
-
-- Connect your data warehouse directly to the environment
+- Connect your data warehouse directly to your virtual environment
 
 - No Docker file management
 
-- Add triggers for scheduled cron jobs, webhooks, and Slack alerts in one line of Python
+- Add triggers for scheduled cron jobs, webhooks, and Slack alerts - in one line of Python.
 
-- Usage-based per-second pricing
+- Usage-based, per-second pricing
 
 ### Core Concepts
 
@@ -39,4 +56,4 @@ description: "Beam is a rapid prototyping framework for data projects. It's the 
 
 - **Triggers** - triggers are actions that can invoke your Beam apps. For example, a REST API trigger allows your Beam app to be invoked via a REST API. A webhook trigger will allow your Beam app to be invoked asyncronously using a webhook, and so on.
 
-- **Volumes** - volumes are data sources that can be mounted to your app. For example, an S3 bucket can be mounted so you can read or write files during the execution of your code.
+- **Outputs** - outputs are file paths that can be used to save files created when your functions are run. 

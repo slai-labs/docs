@@ -89,8 +89,7 @@
       "group": "Dashboard",
       "pages": [
         "dashboard/tracking-usage",
-        "dashboard/keys",
-        "dashboard/secrets-management"
+        "dashboard/keys"
       ]
     },
     {
@@ -124,20 +123,20 @@
         "beam",
         "beam/getting-started/install-beam",
         "beam/getting-started/deploying-an-ml-model",
-        "beam/getting-started/running-a-web-scraper"
+        "beam/getting-started/running-a-web-scraper",
+        "beam/getting-started/stable-diffusion-gpu"
       ]
     },
     {
       "group": "Triggers",
       "pages": [
         "beam/triggers/rest-api",
-        "beam/triggers/cron-job",
         "beam/triggers/webhook"
       ]
     },
     {
-      "group": "Data",
-      "pages": ["beam/data/local-volumes", "beam/data/data-integrations"]
+      "group": "Outputs",
+      "pages": ["beam/data/outputs"]
     },
     {
       "group": "Deployment",

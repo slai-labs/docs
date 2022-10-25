@@ -1,0 +1,97 @@
+---
+title: "Stable Diffusion with GPU"
+description:
+  "A short tutorial on deploying Stable Diffusion on GPU"
+---
+
+### Define the environment
+
+The first thing we'll do is define the environment that our app will run on. 
+
+First, create a file with your Beam App definition. You can name this whatever
+you want. In this example, we'll call it `app.py`.
+
+```python app.py
+import beam
+
+app = beam.App(
+    name="stable-diffusion",
+    cpu=4,
+    memory="16Gi",
+    gpu=1,
+    apt_install=[],
+    python_version="python3.8",
+    python_packages=["diffusers", "transformers", "torch", "pillow"],
+)
+
+app.Outputs.File(path="output.png", name="myimage")
+
+app.Trigger.Webhook(
+    inputs={"prompt": beam.Types.String()},
+    outputs={},
+    handler="run.py:generate_image",
+)
+```
+
+### Diffusers Library
+
+We'll write a simple function that takes a prompt passed from the user, and returns an image generated from Stable Diffusion.
+
+<Warning>You need an access token from [Huggingface](https://huggingface.co) to run this example. You can sign up for Huggingface and access your token on [the settings page](https://huggingface.co/settings/tokens).</Warning>
+
+You'll notice the `image.save()` method below. Since we defined a file path called `output.png` in our `app.py` file above, that's where our images will be saved when invoking this function.
+
+```python run.py
+import torch
+from torch import autocast
+from diffusers import StableDiffusionPipeline
+from PIL import Image
+
+
+def generate_image(**inputs):
+    pipe = StableDiffusionPipeline.from_pretrained(
+        "CompVis/stable-diffusion-v1-4",
+        torch_dtype=torch.float16,
+        revision="fp16",
+        # Add your own access token from Huggingface
+        use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
+    ).to("cuda")
+
+    prompt = inputs["prompt"]
+
+    with autocast("cuda"):
+        image = pipe(prompt, guidance_scale=7.5).images[0]
+        print(image)
+
+    image.save("output.png")
+```
+
+### Deploying on beam
+
+To deploy, run `beam deploy app.py`. You'll see the deployment appear in the dashboard.
+
+![Deployment](/img/beam/getting-started/new-deployment.png)
+
+### Invoking the model 
+
+To call the model, we'll login to Insomnia (our API client) and make a request. Since this is deployed as a webhook, the API will return a task ID.
+
+![Invocation](/img/beam/getting-started/stable-diffusion-api.png)
+
+### Viewing and downloading images 
+
+We can view the status of our API call in the dashboard.
+
+We'll click on our deployment, and click "Tasks" in the toolbar. Each task is an invocation. We can click a task to view the files saved during the run. 
+
+![Download-Artifacts](/img/beam/getting-started/download-artifact.png)
+
+And finally, here's a beaver on the moon, playing electric guitar:
+
+![Beaver-On-Moon](/img/beam/getting-started/beaver.png)
+
+
+
+
+
+
