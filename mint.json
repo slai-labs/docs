@@ -143,16 +143,15 @@
       "pages": ["beam/deployment/logging-and-monitoring"]
     },
     {
+      "group": "Tools",
+      "pages": ["beam/tools/cli", "beam/tools/sdk"]
+    },
+    {
       "group": "Account",
       "pages": [
         "beam/account/api-keys",
-        "beam/account/secrets-management",
         "beam/account/pricing-and-billing"
       ]
-    },
-    {
-      "group": "Tools",
-      "pages": ["beam/tools/cli", "beam/tools/sdk"]
     },
     {
       "group": "Security",

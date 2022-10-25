@@ -24,7 +24,6 @@ beam.App(
 	cpu=8,
 	memory="4Gi",
 	gpu=0,
-	apt_install=[],
 	python_version="python3.8",
 	python_packages=["numpy"],
 )
@@ -38,6 +37,5 @@ beam.App(
 | `cpu`             | _int, 0-16_ | The number of CPU cores to provide to your runtime                                                             |
 | `memory`          | _string_    | The amount of memory to provide to your runtime                                                                |
 | `gpu`             | _int_       | The number of GPU cores to provide to your runtime                                                             |
-| `apt_install`     | _array_     | Linux commands to run on your runtime, used for installing system level packages and modifying the container   |
 | `python_version`  | _string_    | The Python version to install in your runtime                                                                  |
 | `python_packages` | _array_     | The Python libraries to install in your runtime. These can have versioned specified, e.g. `tensorflow==0.2.10` |
