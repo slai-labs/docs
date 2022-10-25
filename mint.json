@@ -136,16 +136,12 @@
       ]
     },
     {
-      "group": "Deployment",
-      "pages": ["beam/deployment/logging-and-monitoring"]
-    },
-    {
-      "group": "Tools",
-      "pages": ["beam/tools/cli", "beam/tools/sdk"]
-    },
-    {
       "group": "Data",
       "pages": ["beam/data/local-volumes", "beam/data/data-integrations"]
+    },
+    {
+      "group": "Deployment",
+      "pages": ["beam/deployment/logging-and-monitoring"]
     },
     {
       "group": "Account",
@@ -156,18 +152,14 @@
       ]
     },
     {
+      "group": "Tools",
+      "pages": ["beam/tools/cli", "beam/tools/sdk"]
+    },
+    {
       "group": "Security",
       "pages": [
         "beam/security/terms-and-conditions",
         "beam/security/privacy-policy"
-      ]
-    },
-    {
-      "group": "Support",
-      "pages": [
-        "beam/support/debugging-guide",
-        "beam/support/faq",
-        "beam/support/slack-community"
       ]
     }
   ],
