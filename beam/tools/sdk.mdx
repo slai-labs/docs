@@ -1,0 +1,43 @@
+---
+title: "SDK"
+description: "The library for creating and managing Beam apps"
+---
+
+### Installation
+
+1. Set up a new folder wherever you want and create a virtual env:
+   `python3 -m virtualenv .venv`
+
+2. Source virtual env: `source .venv/bin/activate`
+
+3. Install Beam SDK: `pip install beam-sdk`
+
+### Defining a runtime
+
+Your Beam runtime is defined in Python. Running the code below will create an
+environment with the compute defined above, build the image, and hot reload as
+you work.
+
+```python
+beam.App(
+	name="testapp",
+	cpu=8,
+	memory="4Gi",
+	gpu=0,
+	apt_install=[],
+	python_version="python3.8",
+	python_packages=["numpy"],
+)
+```
+
+### app() reference
+
+| Field             | Type        | Description                                                                                                    |
+| ----------------- | ----------- | -------------------------------------------------------------------------------------------------------------- |
+| `name`            | _string_    | The name for your app                                                                                          |
+| `cpu`             | _int, 0-16_ | The number of CPU cores to provide to your runtime                                                             |
+| `memory`          | _string_    | The amount of memory to provide to your runtime                                                                |
+| `gpu`             | _int_       | The number of GPU cores to provide to your runtime                                                             |
+| `apt_install`     | _array_     | Linux commands to run on your runtime, used for installing system level packages and modifying the container   |
+| `python_version`  | _string_    | The Python version to install in your runtime                                                                  |
+| `python_packages` | _array_     | The Python libraries to install in your runtime. These can have versioned specified, e.g. `tensorflow==0.2.10` |

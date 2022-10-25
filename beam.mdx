@@ -1,0 +1,42 @@
+---
+title: "Introduction"
+description: "Beam is a rapid prototyping framework for data projects. It's the fastest way to get your data projects running in the cloud."
+---
+
+### Why use Beam?
+
+- You hate reading AWS documentation
+
+- Your M1 laptop can't handle heavy computation, like training a transformer model
+
+- You're building an ML model and want it deployed as an API to see how it performs in the real world
+
+- You've tried using Lambda / Cloud Run and hate having to configure Docker files
+
+- You've tried using FastAPI + a web server and hate writing glue code
+
+### Beam is like AWS Lambda, optimized for data projects
+
+- Scale from experimenting to serving in production
+
+- Develop in local VSCode while running on remote hardware
+
+- Hot reloading - make a change locally and instantly get a production endpoint
+
+- Configure your runtime in Python code - you can specify however many GPU/CPUs you want!
+
+- Connect your data warehouse directly to the environment
+
+- No Docker file management
+
+- Add triggers for scheduled cron jobs, webhooks, and Slack alerts in one line of Python
+
+- Usage-based per-second pricing
+
+### Core Concepts
+
+- **Apps** - each project in Beam is called an app. When you first start Beam, you'll be prompted to define your environment through the `Beam.App()` method in the SDK.
+
+- **Triggers** - triggers are actions that can invoke your Beam apps. For example, a REST API trigger allows your Beam app to be invoked via a REST API. A webhook trigger will allow your Beam app to be invoked asyncronously using a webhook, and so on.
+
+- **Volumes** - volumes are data sources that can be mounted to your app. For example, an S3 bucket can be mounted so you can read or write files during the execution of your code.
