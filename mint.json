@@ -121,6 +121,7 @@
     {
       "group": "Getting Started",
       "pages": [
+        "beam",
         "beam/getting-started/install-beam",
         "beam/getting-started/deploying-an-ml-model",
         "beam/getting-started/running-a-web-scraper"
