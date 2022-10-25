@@ -1,8 +1,34 @@
 ---
 title: "Webhook"
-description: "Coming soon 🚧"
+description: "Deploy async functions on Beam"
 ---
 
+### Deploying Webhooks
+
+Webhooks are used for deploying functions that run asyncronously on Beam. You can add webhook triggers to the file with your Beam app definition.
+
+Webhooks require only two fields:
+
+* Inputs 
+* Handler 
+
+Since webhooks run asyncronously and only return a Task ID, the outputs field is not required.
+
 ```python
-app.Trigger.Webhook(inputs={}, handler="somefile.py:myfunction")
+app.Trigger.Webhook(
+    inputs={"prompt": beam.Types.String()},
+    handler="run.py:my_async_function",
+)
 ```
+
+### Invoking Webhooks 
+
+Calling a webhook will return a Task ID. 
+
+![Invocation](/img/beam/getting-started/stable-diffusion-api.png)
+
+You can view the status of each invocation in the dashboard, by clicking on your deployment and navigating to the latest task.
+
+![Download-Artifacts](/img/beam/getting-started/download-artifact.png)
+
+If any files were generated during the execution of your task, you can download them by clicking on the task, and clicking **Download**.

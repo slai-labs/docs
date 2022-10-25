@@ -1,0 +1,24 @@
+---
+title: "Saving Files"
+description: "Read and write files from inside a Beam environment"
+---
+
+### Saving Files During Function Execution
+
+You'll probably want a way of saving files while your functions run on Beam. Beam has a concept called **Outputs** which let you save files created during the execution of your functions.
+
+In `app.py`, you can define paths to save files to. For example, if we wanted to save images created when our functions are run, we could create an output like this:
+
+```python
+app.Outputs.File(path="output.png", name="myimage")
+```
+
+We can also define directories:
+
+```python
+app.Outputs.Dir(path="images", name="generated_images")
+```
+
+You can download files created during each function execution by logging into the dashboard, finding your deployment, and clicking on the latest task.
+
+![Download-Artifacts](/img/beam/getting-started/download-artifact.png)
