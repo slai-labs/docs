@@ -1,0 +1,32 @@
+---
+title: "Persistent Volumes"
+description: "A readable and writable data store that will persist across tasks"
+---
+
+Beam allows you to create persistent volumes that can be used across tasks. You might use persistent volumes for things like storing model artifacts created during training, or caching model weights to avoid having to download them each time your function is invoked. 
+
+### Mounting a Persistent Volume
+
+To setup a persistent volume, first mount in your app definition file. The path is relative to the files in your workspace.
+
+```python app.py
+app.Mount.PersistentVolume(name="model_weights", app_path="./weights")
+```
+
+### Reading and Writing Files
+
+You can read and write to the persistent volume like an ordinary Python file:
+
+```python run.py
+def get_model_weights():
+    with open("./weights/my_file.pkl", "r") as f:
+        f.read()
+        f.close()
+
+def update_model_weights():
+    with open("./weights/my_file.pkl", "w") as f:
+        f.write("update I want to persist")
+        f.close()
+```
+
+

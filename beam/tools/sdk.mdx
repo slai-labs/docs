@@ -5,12 +5,27 @@ description: "The library for creating and managing Beam apps"
 
 ### Installation
 
-1. Set up a new folder wherever you want and create a virtual env:
-   `python3 -m virtualenv .venv`
-
-2. Source virtual env: `source .venv/bin/activate`
-
-3. Install Beam SDK: `pip install beam-sdk`
+<AccordionGroup>
+  <Accordion title="Setup Virtual Environment" icon={solid("circle-1")}>
+		Set up a new folder wherever you want and create a virtual env:
+		```curl
+		python3 -m virtualenv .venv
+		```
+		Source virtual env: 
+		```curl
+		source .venv/bin/activate
+		```
+  </Accordion>
+  <Accordion
+    title="Install Beam SDK"
+    icon={solid("circle-2")}
+  >
+    Install Beam SDK
+		```curl
+		pip install beam-sdk
+		```
+  </Accordion>
+</AccordionGroup>
 
 ### Defining a runtime
 
@@ -39,3 +54,4 @@ beam.App(
 | `gpu`             | _int_       | The number of GPU cores to provide to your runtime                                                             |
 | `python_version`  | _string_    | The Python version to install in your runtime                                                                  |
 | `python_packages` | _array_     | The Python libraries to install in your runtime. These can have versioned specified, e.g. `tensorflow==0.2.10` |
+

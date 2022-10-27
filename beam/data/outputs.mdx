@@ -1,27 +1,31 @@
 ---
-title: "Saving Files"
+title: "Outputs"
 description: "Read and write files from inside a Beam environment"
 ---
 
-### Saving Files During Function Execution
+You may want to create temporary files or directories for your Beam tasks. Beam includes **Outputs** which let you create files or directories when your function is invoked.
 
-You'll probably want a way of saving files while your functions run on Beam. Beam has a concept called **Outputs** which let you define paths to save files to.
+You can add **Output** to the same file with your `Beam.App()` definition. 
 
-You can add **Outputs** to the same file with your `Beam.App()` definition. 
+<Tip>
+Outputs are ideal for cases where you don't need to persist data between tasks. 
 
-For example, if we wanted to save images generated during a function call, we could define an output like this:
+If you'd like to persist your data between tasks (meaning you can stop a Beam task, resume it, and your data will still exist), you should use a [Persistent Volume](/beam/data/persistent-volumes) instead.
+</Tip>
 
-```python
-app.Outputs.File(path="output.png", name="myimage")
-```
-
-You can also create directories, through the `Outputs.Dir()` method:
+For example, if you wanted to save images generated during a function call, you could define an output like this:
 
 ```python
-app.Outputs.Dir(path="images", name="generated_images")
+app.Output.File(path="output.png", name="myimage")
 ```
 
-### Accessing Saved Files
+You can also create directories, through the `Output.Dir()` method:
+
+```python
+app.Output.Dir(path="images", name="generated_images")
+```
+
+### Accessing Outputs
 
 You can download files created during each function execution by logging into the dashboard, finding your deployment, and clicking on the latest task.
 

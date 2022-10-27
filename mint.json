@@ -135,8 +135,11 @@
       ]
     },
     {
-      "group": "Outputs",
-      "pages": ["beam/data/outputs"]
+      "group": "Data",
+      "pages": [
+        "beam/data/outputs", 
+        "beam/data/persistent-volumes"
+      ]
     },
     {
       "group": "Deployment",

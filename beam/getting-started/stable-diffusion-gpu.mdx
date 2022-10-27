@@ -22,7 +22,7 @@ app = beam.App(
     python_packages=["diffusers", "transformers", "torch", "pillow"],
 )
 
-app.Outputs.File(path="output.png", name="myimage")
+app.Output.File(path="output.png", name="myimage")
 
 app.Trigger.Webhook(
     inputs={"prompt": beam.Types.String()},
