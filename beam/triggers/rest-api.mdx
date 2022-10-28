@@ -3,9 +3,13 @@ title: "REST API"
 description: "Deploying a Beam app as a REST API"
 ---
 
-### Deploying an app
+### Deploying a REST API
 
-Beam apps can be deployed using the `RestAPI` trigger. Here's an example of what
+Beam apps can be deployed using the `RestAPI` trigger.
+
+Input and output fields are serialized and validated by the [`Beam.Types`](http://localhost:3000/beam/triggers/webhook#beam-types) module.
+
+Here's an example of what
 this might look like:
 
 ```python
@@ -22,6 +26,36 @@ app.Trigger.RestAPI(
 | `outputs` | _dict_   | A dictionary specifying the outputs returned from the API |
 | `handler` | _string_ | The function that will be run when the API is invoked     |
 
+### Calling the API
+
+After deploying the API, you'll be able to copy a cURL request to hit the API. In your app dashboard, click **Call API**.
+
+![Call API](/img/beam/tools/call-api.png)
+
+### Example Request
+
+```curl
+curl -X POST --compressed "https://beam.slai.io/ahg0v" \
+   -H 'Accept: */*' \
+   -H 'Accept-Encoding: gzip, deflate' \
+   -H 'Authorization: Basic dW5kZWZpbmVkOnVuZGVmaW5lZA==' \
+   -H 'Connection: keep-alive' \
+   -H 'Content-Type: application/json' \
+   -d '{"prompt": "Here's my example prompt"}'
+```
+
+### Example Response
+
+```json
+{
+  "result": {
+    "prediction": "{'POSITIVE': 0.9988627433776855, 'NEGATIVE': 0.0011372779263183475}"
+  },
+  "msg": "",
+  "error_msg": ""
+}
+```
+
 ### Beam Types
 
 The **beam** library includes several basic data types that can be used to
@@ -29,6 +63,7 @@ validate your inputs against.
 
 | Type                                            | Description                                                                                        |
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `beam.types.Json()`                             | A JSON object                                                                                      |
 | `beam.types.String(max_length=None)`            | A string field, with an optional max_length parameter                                              |
 | `beam.types.Float()`                            | Standard floating point value                                                                      |
 | `beam.types.Boolean()`                          | Standard boolean value                                                                             |

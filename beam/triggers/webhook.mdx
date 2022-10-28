@@ -3,16 +3,13 @@ title: "Webhook"
 description: "Deploy async functions on Beam"
 ---
 
-### Deploying Webhooks
+### Deploying a Webhook
 
-Webhooks are used for deploying functions that run asyncronously on Beam. You can add webhook triggers to the file with your Beam app definition.
+Webhooks are used for deploying functions that run asyncronously on Beam.
 
-Webhooks require only two fields:
+You can add webhook triggers to the file with your Beam app definition.
 
-* Inputs 
-* Handler 
-
-Since webhooks run asyncronously and only return a Task ID, the outputs field is not required.
+Input fields are serialized and validated by the [`Beam.Types`](http://localhost:3000/beam/triggers/webhook#beam-types) module.
 
 ```python
 app.Trigger.Webhook(
@@ -21,9 +18,14 @@ app.Trigger.Webhook(
 )
 ```
 
-### Invoking Webhooks 
+| Name      | Type     | Description                                           |
+| --------- | -------- | ----------------------------------------------------- |
+| `inputs`  | _dict_   | A dictionary specifying the interface for the API     |
+| `handler` | _string_ | The function that will be run when the API is invoked |
 
-Calling a webhook will return a Task ID. 
+### Invoking Webhooks
+
+Calling a webhook will return a Task ID.
 
 ![Invocation](/img/beam/getting-started/stable-diffusion-api.png)
 
@@ -32,3 +34,29 @@ You can view the status of each invocation in the dashboard, by clicking on your
 ![Download-Artifacts](/img/beam/getting-started/download-artifact.png)
 
 If any files were generated during the execution of your task, you can download them by clicking on the task, and clicking **Download**.
+
+### Beam Types
+
+The **beam** library includes several basic data types that can be used to
+validate your inputs against.
+
+| Type                                            | Description                                                                                        |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `beam.types.Json()`                             | A JSON object                                                                                      |
+| `beam.types.String(max_length=None)`            | A string field, with an optional max_length parameter                                              |
+| `beam.types.Float()`                            | Standard floating point value                                                                      |
+| `beam.types.Boolean()`                          | Standard boolean value                                                                             |
+| `beam.types.Tensor(shape=None, dtype=None)`     | A torch tensor object, with optional shape and dtype parameters                                    |
+| `beam.types.Dataframe()`                        | A pandas dataframe object                                                                          |
+| `beam.types.NumpyArray(shape=None, dtype=None)` | A numpy array, with optional shape and dtype parameters                                            |
+| `beam.types.Binary()`                           | A binary object, for example a video file or anything that doesn't fit into the other types listed |
+| `beam.types.Image(raw=False)`                   | A generic image, automatically serialized into a PIL object for use in the handler                 |
+
+<Tip>
+Types can be labeled optional by passing in `required=false`
+
+`beam.types.Boolean(required=false)`
+
+`beam.types.Dataframe(required=false)`
+
+</Tip>
