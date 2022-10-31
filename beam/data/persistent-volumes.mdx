@@ -3,7 +3,7 @@ title: "Persistent Volumes"
 description: "A readable and writable data store that will persist across tasks"
 ---
 
-Beam allows you to create persistent volumes that can be used across tasks. You might use persistent volumes for things like storing model artifacts created during training, or caching model weights to avoid having to download them each time your function is invoked. 
+Beam allows you to create persistent volumes that can be used across tasks. You might use persistent volumes for things like storing model artifacts created during training, or caching model weights to avoid having to download them each time your function is invoked.
 
 ### Mounting a Persistent Volume
 
@@ -29,4 +29,38 @@ def update_model_weights():
         f.close()
 ```
 
+### Example: Caching Model Weights
 
+A good use case for Persistent Volumes is caching your ML model in order to avoid downloading it each time you make a prediction.
+
+If you're using a Huggingface model, you can set the Huggingface cache location in `app.py`.
+
+```python app.py
+import os
+
+app.Mount.PersistentVolume(app_path="./cached_models", name="cached_model")
+os.environ["TRANSFORMERS_CACHE"] = "./cached_models"
+```
+
+### Example: Saving Pickle Files
+
+You can manually save files to the Persistent Volume. First, mount the volume in `app.py`.
+
+```python app.py
+app.Mount.PersistentVolume(app_path="./my_pickles", name="pickle_files")
+```
+
+After mounting the volume, you can read and write to it from anywhere in your app, and the contents will be persisted between runs.
+
+```python run.py
+import os
+import pickle
+
+APP_PATH = "./my_pickles"
+
+def load_pkl(my_pickle):
+    return pickle.load(open(f'{APP_PATH}/{my_pickle}', "rb"))
+
+def save_pkl(my_pickle):
+    return pickle.dump(my_pickle, open(f'{APP_PATH}/{pickle_id}', "wb"))
+```

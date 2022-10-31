@@ -124,7 +124,8 @@
         "beam/getting-started/install-beam",
         "beam/getting-started/deploying-an-ml-model",
         "beam/getting-started/running-a-web-scraper",
-        "beam/getting-started/stable-diffusion-gpu"
+        "beam/getting-started/stable-diffusion-gpu",
+        "beam/getting-started/ci-integration"
       ]
     },
     {
