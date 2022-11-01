@@ -1,7 +1,42 @@
 ---
 title: "Introduction"
-description: "Beam is a rapid prototyping framework for data projects. It's the fastest way to get your data projects running in the cloud."
+description: "Beam is a serverless development platform for ML and compute-heavy projects. We're one of the fastest (and most affordable) ways to run your code on the cloud."
 ---
+
+<Accordion title="What can you do with Beam?">
+- Deploy ML models on serverless runtimes. Your app will scale automatically with traffic and spin down when idle.
+
+- Develop on your local IDE, while running on remote GPUs
+
+- Instantly jump from hacking on a script to serving an API in production
+
+- Save money on your cloud bill. Beam is serverless and charges simple usage-based, per-second pricing
+
+</Accordion>
+
+### 🛰 A local development experience on remote hardware
+
+You can write and run your code locally - except when you enter your shell, your code will run on Beam instead of your local machine.
+
+<video controls>
+  <source src="img/videos/develop-locally.mp4" type="video/mp4"></source>
+</video>
+
+### 📦 Setup remote virtual environments in code
+
+Configure your runtime in Python - tell us how many GPUs you need and which libraries you want installed, and Beam will spawn a remote environment for you.
+
+<video controls>
+  <source src="img/videos/define-runtime.mp4" type="video/mp4"></source>
+</video>
+
+### 🚀 Deploy apps using Triggers
+
+Beam includes triggers to schedule cron jobs, deploy webhooks, and send Slack alerts - all in just three lines of Python.
+
+<video controls>
+  <source src="img/videos/deploy.mp4" type="video/mp4"></source>
+</video>
 
 <Warning>
   Beam is currently in private beta. If you're reading this, you're one of the
@@ -43,36 +78,6 @@ description: "Beam is a rapid prototyping framework for data projects. It's the 
 >
   Deploying a pre-trained ML model as a REST API
 </Card>
-
-### Beam is like AWS Lambda, optimized for compute-heavy projects
-
-- Instantly jump from hacking on a script to serving a scalable API in production
-
-- Develop in your local IDE while running on remote hardware
-
-- Configure your runtime in Python. You can specify as many GPU/CPUs as you want.
-
-- Hot reloads. Make a change locally and instantly get a production endpoint.
-
-- Connect your data warehouse directly to your virtual environment
-
-- No Docker file management
-
-- Add triggers for scheduled cron jobs, webhooks, and Slack alerts - in one line of Python.
-
-- Usage-based, per-second pricing
-
-### Why use Beam?
-
-- You're building an ML model and want it deployed as an API to see how it performs in the real world
-
-- You've tried using Lambda / Cloud Run and hate having to configure Docker files
-
-- You've tried using FastAPI + a web server and want to minimize glue code
-
-- You hate reading AWS / GCP documentation
-
-- Your M1 laptop can't handle heavy computation, like training a transformer model
 
 ### Core Concepts
 
