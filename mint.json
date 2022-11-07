@@ -40,12 +40,6 @@
       "icon": "comments",
       "color": "#6365f1",
       "url": "https://docs.slai.io/user-guides/migrating-an-existing-model"
-    },
-    {
-      "name": "Beam",
-      "icon": "satellite-dish",
-      "url": "beam",
-      "isDefaultHidden": true
     }
   ],
   "navigation": [
@@ -116,58 +110,6 @@
           ]
         },
         "security/privacy-policy"
-      ]
-    },
-    {
-      "group": "Getting Started",
-      "pages": [
-        "beam",
-        "beam/getting-started/install-beam",
-        "beam/getting-started/deploying-an-ml-model",
-        "beam/getting-started/running-a-web-scraper"
-      ]
-    },
-    {
-      "group": "Triggers",
-      "pages": [
-        "beam/triggers/rest-api",
-        "beam/triggers/cron-job",
-        "beam/triggers/webhook"
-      ]
-    },
-    {
-      "group": "Deployment",
-      "pages": ["beam/deployment/logging-and-monitoring"]
-    },
-    {
-      "group": "Tools",
-      "pages": ["beam/tools/cli", "beam/tools/sdk"]
-    },
-    {
-      "group": "Data",
-      "pages": ["beam/data/local-volumes", "beam/data/data-integrations"]
-    },
-    {
-      "group": "Account",
-      "pages": [
-        "beam/account/api-keys",
-        "beam/account/secrets-management",
-        "beam/account/pricing-and-billing"
-      ]
-    },
-    {
-      "group": "Security",
-      "pages": [
-        "beam/security/terms-and-conditions",
-        "beam/security/privacy-policy"
-      ]
-    },
-    {
-      "group": "Support",
-      "pages": [
-        "beam/support/debugging-guide",
-        "beam/support/faq",
-        "beam/support/slack-community"
       ]
     }
   ],
