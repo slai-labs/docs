@@ -40,12 +40,6 @@
       "icon": "comments",
       "color": "#6365f1",
       "url": "https://docs.slai.io/user-guides/migrating-an-existing-model"
-    },
-    {
-      "name": "Beam",
-      "icon": "satellite-dish",
-      "url": "beam",
-      "isDefaultHidden": true
     }
   ],
   "navigation": [
@@ -87,10 +81,7 @@
     },
     {
       "group": "Dashboard",
-      "pages": [
-        "dashboard/tracking-usage",
-        "dashboard/keys"
-      ]
+      "pages": ["dashboard/tracking-usage", "dashboard/keys"]
     },
     {
       "group": "API Reference",
@@ -115,54 +106,6 @@
           ]
         },
         "security/privacy-policy"
-      ]
-    },
-    {
-      "group": "Guides",
-      "pages": [
-        "beam",
-        "beam/getting-started/quickstart",
-        "beam/getting-started/install-beam",
-        "beam/getting-started/deploying-an-ml-model",
-        "beam/getting-started/running-a-web-scraper",
-        "beam/getting-started/stable-diffusion-gpu",
-        "beam/getting-started/ci-integration"
-      ]
-    },
-    {
-      "group": "Triggers",
-      "pages": [
-        "beam/triggers/rest-api",
-        "beam/triggers/webhook"
-      ]
-    },
-    {
-      "group": "Data",
-      "pages": [
-        "beam/data/outputs", 
-        "beam/data/persistent-volumes"
-      ]
-    },
-    {
-      "group": "Deployment",
-      "pages": ["beam/deployment/logging-and-monitoring"]
-    },
-    {
-      "group": "Tools",
-      "pages": ["beam/tools/cli", "beam/tools/sdk"]
-    },
-    {
-      "group": "Account",
-      "pages": [
-        "beam/account/api-keys",
-        "beam/account/pricing-and-billing"
-      ]
-    },
-    {
-      "group": "Security",
-      "pages": [
-        "beam/security/terms-and-conditions",
-        "beam/security/privacy-policy"
       ]
     }
   ],
