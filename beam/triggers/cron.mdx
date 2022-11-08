@@ -1,0 +1,42 @@
+---
+title: "Scheduled Cron Jobs"
+description: "Scheduling tasks on Beam"
+---
+
+### Scheduling a task
+
+Beam apps can be scheduled to run using the `Schedule` trigger.
+
+Here's an example of what this might look like:
+
+```python
+app.Trigger.Schedule(
+    when="every 5m",
+    handler="run.py:send_text",
+)
+```
+
+`Schedule` supports cron and string expressions. You can use [Crontab](https://crontab.guru) to help generate expressions.
+
+### Cron Expression Cheatsheet
+
+Beam supports standard cron expressions. Here are a few examples:
+
+| Schedule                                                         | Syntax               |
+| ---------------------------------------------------------------- | -------------------- |
+| Every minute                                                     | `*/1 * * * *`        |
+| Every day at mightnight                                          | `0 0 * * *`          |
+| 10:15am, daily                                                   | `0 15 10 ? * *`      |
+| 2:10 p.m. and at 2:44 p.m. every Wednesday in the month of March | `0 10,44 14 ? 3 WED` |
+
+### String Expression Cheatsheet
+
+You can also write expressions using a friendlier human-readable syntax:
+
+| Schedule        | Syntax     |
+| --------------- | ---------- |
+| Every 1 second  | `every 1s` |
+| Every 5 minutes | `every 5m` |
+| Every hour      | `every 1h` |
+| Every day       | `every 1d` |
+| Every week      | `every 1w` |

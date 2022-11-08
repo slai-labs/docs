@@ -133,7 +133,8 @@
       "group": "Triggers",
       "pages": [
         "beam/triggers/rest-api",
-        "beam/triggers/webhook"
+        "beam/triggers/webhook",
+        "beam/triggers/cron"
       ]
     },
     {
