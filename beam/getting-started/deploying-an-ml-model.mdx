@@ -17,12 +17,12 @@ you want. In this example, we'll call it `app.py`.
 import beam
 
 app = beam.App(
-    name="sentiment-analysis",
+    name="sentiment-analysis-app",
     cpu=4,
     memory="4Gi",
     gpu=0,
-    python_version="python3.9",
-    python_packages=["transformers", "torch"],
+    python_version="python3.8",
+    python_packages=["transformers", "torch", "numpy"],
 )
 ```
 
@@ -41,12 +41,12 @@ def predict_sentiment(**inputs):
     model = pipeline(
         "sentiment-analysis", model="siebert/sentiment-roberta-large-english"
     )
-    result = model(inputs["prompt"], truncation=True, top_k=1)
+    result = model(inputs["text"], truncation=True, top_k=1)
     prediction = {i["label"]: i["score"] for i in result}
 
     print(prediction)
 
-    return prediction
+    return {"prediction": prediction}
 ```
 
 ### Setting a REST API Trigger
@@ -72,9 +72,23 @@ app.Trigger.RestAPI(
 )
 ```
 
+### (Optional) Caching Model on Disk
+
+For performance reasons, you want to store the model on disk rather than downloading it from HuggingFace for each request.
+
+Create a **[Persistent Volume](/beam/data/persistent-volumes)** to store the model weights.
+
+Add the following lines to your `app.py`:
+
+```python app.py
+app.Mount.PersistentVolume(app_path="./cached_models", name="cached_model")
+os.environ["TRANSFORMERS_CACHE"] = "./cached_models"
+```
+
 The complete `app.py` file will look like this:
 
 ```python app.py
+import os
 import beam
 
 app = beam.App(
@@ -91,6 +105,9 @@ app.Trigger.RestAPI(
     outputs={"prediction": beam.Types.String()},
     handler="inference.py:predict_sentiment",
 )
+
+app.Mount.PersistentVolume(app_path="./cached_models", name="cached_model")
+os.environ["TRANSFORMERS_CACHE"] = "./cached_models"
 ```
 
 ### Deploying the app
@@ -107,20 +124,21 @@ beam deploy app.py
 Once you deploy, you'll see the following console output:
 
 ![](/img/beam/getting-started/call-api.png)
-
 At the bottom of the console, you'll see a URL for invoking your function.
 Here's what a cURL request would look like:
 
 ```bash
-curl -X POST --compressed https://beam.eng-stage.slai.io/dzzf3/ \
- -H 'Accept: \*/\*' \
- -H 'Accept-Encoding: gzip, deflate' \
- -H 'Authorization: Basic ZGQ2MzY3NGMyZmYwYzMwNjU1YTM1ODVkM2I4OTQzYmE6ZDIwNWJhMTk1ZGQ2ZTdmZDFjNDE5ODQyYjQ1Nzk0YTY=' \
- -d '{"text": "I think baseball is overrated"}'
+  curl -X POST --compressed "https://beam.slai.io/kajru" \
+   -H 'Accept: */*' \
+   -H 'Accept-Encoding: gzip, deflate' \
+   -H 'Authorization: Basic YWJmNWVhYjhjY2VkZTQ3ZDJmZWU4NTYyNTliYWU3NDA6ZTE0ZTE0MTY0M2NmYzkxNDdkMDM1MzZkNDdjYzRkMGI=' \
+   -H 'Connection: keep-alive' \
+   -H 'Content-Type: application/json' \
+   -d '{"text": "If we override the bandwidth, we can get to the SMTP capacitor through the cross-platform RSS alarm!"}'
 ```
 
 <Note>
-**The requests are authenticated with basic auth.** For the beta, your credentials are simply: `Username: user` and `Password: user`
+**The requests are authenticated with basic auth.** Your username is your ClientID, and password is your Client Secret.
 
 </Note>
 
