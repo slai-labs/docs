@@ -1,18 +1,18 @@
 ---
-title: "Stable Diffusion with GPU"
-description: "A short tutorial on deploying Stable Diffusion on GPU"
+title: "Stable Diffusion API"
+description: "Building an API to generate images with stable diffusion"
 ---
 
 ### Define the environment
 
-The first thing we'll do is define the environment that our app will run on.
-
 First, create a file with your Beam App definition. You can name this whatever
-you want. In this example, we'll call it `app.py`.
+you want. In this example, name it `app.py`.
+
 
 ```python app.py
 import beam
 
+# The environment your code will run on
 app = beam.App(
     name="stable-diffusion",
     cpu=4,
@@ -22,28 +22,35 @@ app = beam.App(
     python_packages=["diffusers", "transformers", "torch", "pillow"],
 )
 
-app.Output.File(path="output.png", name="myimage")
-
+# Deploys function as async webhook
 app.Trigger.Webhook(
     inputs={"prompt": beam.Types.String()},
     outputs={},
-    handler="run.py:generate_image",
+    handler="run.py:generate_image"
 )
+
+# File to store image outputs
+app.Output.File(path="output.png", name="myimage")
+
+# Persistent volume to store cached model
+app.Mount.PersistentVolume(app_path="./cached_models", name="cached_model")
 ```
 
-### Diffusers Library
+### Inference Function
 
-We'll write a simple function that takes a prompt passed from the user, and returns an image generated from Stable Diffusion.
+Write a simple function that takes a prompt passed from the user, and returns an image generated using Stable Diffusion.
 
 <Warning>
-  You need an access token from [Huggingface](https://huggingface.co) to run
-  this example. You can sign up for Huggingface and access your token on [the
-  settings page](https://huggingface.co/settings/tokens).
+  You need an access token from Huggingface to run this example. You can sign up
+  for Huggingface and access your token on [the settings
+  page](https://huggingface.co/settings/tokens), and store it in the [Beam
+  Secrets Manager](/beam/account/secrets-management).
 </Warning>
 
-You'll notice the `image.save()` method below. Since we defined a file path called `output.png` in our `app.py` file above, that's where our images will be saved when invoking this function.
+Notice the `image.save()` method below. You defined a file path called `output.png` in `app.py`, and that's where your images will be saved.
 
 ```python run.py
+import os
 import torch
 from torch import autocast
 from diffusers import StableDiffusionPipeline
@@ -68,26 +75,67 @@ def generate_image(**inputs):
     image.save("output.png")
 ```
 
-### Deploying on beam
+### Deploying the API
 
-To deploy, run `beam deploy app.py`. You'll see the deployment appear in the dashboard.
+In your teriminal, run:
 
-![Deployment](/img/beam/getting-started/new-deployment.png)
+```curl
+beam deploy app.py
+```
 
-### Invoking the model
+You'll see the deployment appear in the dashboard.
 
-To call the model, we'll login to Insomnia (our API client) and make a request. Since this is deployed as a webhook, the API will return a task ID.
+![Deployment](/img/getting-started/new-deployment.png)
 
-![Invocation](/img/beam/getting-started/stable-diffusion-api.png)
+### Generating images
 
-### Viewing and downloading images
+In the dashboard, click **Call API** to view the API URL. 
 
-We can view the status of our API call in the dashboard.
+![](/img/tools/call-api.png)
 
-We'll click on our deployment, and click "Tasks" in the toolbar. Each task is an invocation. We can click a task to view the files saved during the run.
+Paste the code into your terminal to make a request.
 
-![Download-Artifacts](/img/beam/getting-started/download-artifact.png)
+```curl
+  curl -X POST --compressed "https://beam.slai.io/jrg5v" \
+   -H 'Accept: */*' \
+   -H 'Accept-Encoding: gzip, deflate' \
+   -H 'Authorization: Basic [YOUR_AUTH_TOKEN]' \
+   -H 'Connection: keep-alive' \
+   -H 'Content-Type: application/json' \
+   -d '{"prompt": "a renaissance style photo of steve jobs"}'
+```
 
-And finally, here's a beaver on the moon, playing electric guitar:
+The API returns a Task ID.
 
-![Beaver-On-Moon](/img/beam/getting-started/beaver.png)
+```json
+{"task_id":"edbcf7ff-e8ce-4199-8661-8e15ed880481"}
+```
+
+### Querying the status of a job
+
+You will use the `/task` API to retrieve the status of a job, passing in the Task ID.
+
+```curl
+curl -X POST --compressed "https://api.slai.io/beam/task" \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Authorization: Basic [YOUR_AUTH_TOKEN]' \
+  -H 'Content-Type: application/json' \
+  -d '{
+	"action": "retrieve",
+	"task_id": "edbcf7ff-e8ce-4199-8661-8e15ed880481"
+}'
+```
+
+This returns the generated image in the `outputs` dictionary, as a pre-signed URL.
+
+```json
+{
+	"outputs": {
+		"myoutput": "https://beam-data.slai.io/beam.slai.io/z6sks/outputs/z6sks-0041/53b8338c-d905-4356-845d-a259ec279cab/myoutput.zip"
+	},
+	"started_at": "2022-11-04T19:43:25.668303Z",
+	"ended_at": "2022-11-04T19:43:26.017401Z",
+	"task_id": "edbcf7ff-e8ce-4199-8661-8e15ed880481"
+}
+```
