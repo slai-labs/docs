@@ -8,7 +8,6 @@ description: "Building an API to generate images with stable diffusion"
 First, create a file with your Beam App definition. You can name this whatever
 you want. In this example, name it `app.py`.
 
-
 ```python app.py
 import beam
 
@@ -51,6 +50,10 @@ Notice the `image.save()` method below. You defined a file path called `output.p
 
 ```python run.py
 import os
+
+# Specify the HuggingFace model cache before the diffusers library is imported
+os.environ["TRANSFORMERS_CACHE"] = "./cached_models"
+
 import torch
 from torch import autocast
 from diffusers import StableDiffusionPipeline
@@ -89,7 +92,7 @@ You'll see the deployment appear in the dashboard.
 
 ### Generating images
 
-In the dashboard, click **Call API** to view the API URL. 
+In the dashboard, click **Call API** to view the API URL.
 
 ![](/img/tools/call-api.png)
 
@@ -108,7 +111,7 @@ Paste the code into your terminal to make a request.
 The API returns a Task ID.
 
 ```json
-{"task_id":"edbcf7ff-e8ce-4199-8661-8e15ed880481"}
+{ "task_id": "edbcf7ff-e8ce-4199-8661-8e15ed880481" }
 ```
 
 ### Querying the status of a job
@@ -131,11 +134,11 @@ This returns the generated image in the `outputs` dictionary, as a pre-signed UR
 
 ```json
 {
-	"outputs": {
-		"myoutput": "https://beam-data.slai.io/beam.slai.io/z6sks/outputs/z6sks-0041/53b8338c-d905-4356-845d-a259ec279cab/myoutput.zip"
-	},
-	"started_at": "2022-11-04T19:43:25.668303Z",
-	"ended_at": "2022-11-04T19:43:26.017401Z",
-	"task_id": "edbcf7ff-e8ce-4199-8661-8e15ed880481"
+  "outputs": {
+    "myoutput": "https://beam-data.slai.io/beam.slai.io/z6sks/outputs/z6sks-0041/53b8338c-d905-4356-845d-a259ec279cab/myoutput.zip"
+  },
+  "started_at": "2022-11-04T19:43:25.668303Z",
+  "ended_at": "2022-11-04T19:43:26.017401Z",
+  "task_id": "edbcf7ff-e8ce-4199-8661-8e15ed880481"
 }
 ```
