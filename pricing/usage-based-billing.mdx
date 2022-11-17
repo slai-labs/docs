@@ -1,22 +1,13 @@
 ---
 title: "Usage-Based Billing"
 ---
+Slai is serverless, so you are only charged for the compute used, down to the second. If you don't run anything, you aren't charged. There's no charge to keep a REST API running indefinitely, for example.
 
-Slai charges for only the compute you actually use, and is billed by the second. Your total cost is based on a combination of CPU and Memory used, and will vary based on whether you're using a CPU or GPU.
+### Pricing
 
-<Card title="Cost for CPU Machines" icon={duotone("server")}>
-
-**$0.06 / hour per CPU, or $0.015 / hour per GB memory - _whichever is greater_**
-
-For example, a job using 4 CPU cores and 8GB of memory would cost $0.24 / hour. If the job takes 5 minutes to run, you'd pay $0.02.
-
-</Card>
-
-<Card title="Cost for GPU Machines" icon={duotone("bolt")}>
-**$0.10 / hour per GPU, or $0.025 / hour per GB memory - _whichever is
-greater_**
-
-</Card>
+- **CPU**: $0.10 / hour, per core
+- **GPU**: $2.05 / hour, per GPU
+- **Memory**: $0.0025 / hour, per GB
 
 ## Monitoring compute usage
 

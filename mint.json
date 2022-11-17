@@ -156,6 +156,7 @@
       "group": "Account",
       "pages": [
         "beam/account/api-keys",
+        "beam/account/secrets-management",
         "beam/account/pricing-and-billing"
       ]
     },
