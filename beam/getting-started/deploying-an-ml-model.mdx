@@ -82,7 +82,7 @@ Add the following lines to your `app.py`:
 
 ```python app.py
 app.Mount.PersistentVolume(app_path="./cached_models", name="cached_model")
-os.environ["TRANSFORMERS_CACHE"] = "./cached_models"
+os.environ["TRANSFORMERS_CACHE"] = "/workspace/cached_models"
 ```
 
 The complete `app.py` file will look like this:
@@ -107,7 +107,7 @@ app.Trigger.RestAPI(
 )
 
 app.Mount.PersistentVolume(app_path="./cached_models", name="cached_model")
-os.environ["TRANSFORMERS_CACHE"] = "./cached_models"
+os.environ["TRANSFORMERS_CACHE"] = "/workspace/cached_models"
 ```
 
 ### Deploying the app

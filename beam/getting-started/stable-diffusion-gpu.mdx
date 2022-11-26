@@ -52,7 +52,8 @@ Notice the `image.save()` method below. You defined a file path called `output.p
 import os
 
 # Specify the HuggingFace model cache before the diffusers library is imported
-os.environ["TRANSFORMERS_CACHE"] = "./cached_models"
+os.environ["TRANSFORMERS_CACHE"] = "/workspace/cached_models"
+os.environ["HF_HOME"] = "/workspace/cached_models"
 
 import torch
 from torch import autocast
