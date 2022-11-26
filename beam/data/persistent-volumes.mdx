@@ -39,7 +39,7 @@ If you're using a Huggingface model, you can set the Huggingface cache location 
 import os
 
 app.Mount.PersistentVolume(app_path="./cached_models", name="cached_model")
-os.environ["TRANSFORMERS_CACHE"] = "./cached_models"
+os.environ["TRANSFORMERS_CACHE"] = "/workspace/cached_models"
 ```
 
 ### Example: Saving Pickle Files
